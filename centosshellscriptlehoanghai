@@ -1,0 +1,47 @@
+clear
+echo "   ____ _____ _   _ _____ ___  ____    ____  _   _ _____ _     _       _       _   _   _   _ ";
+echo "  / ___| ____| \ | |_   _/ _ \/ ___|  / ___|| | | | ____| |   | |     | |     | | | | | | | |";
+echo " | |   |  _| |  \| | | || | | \___ \  \___ \| |_| |  _| | |   | |     | |     | |_| | | |_| |";
+echo " | |___| |___| |\  | | || |_| |___) |  ___) |  _  | |___| |___| |___  | |___ _|  _  |_|  _  |";
+echo "  \____|_____|_| \_| |_| \___/|____/  |____/|_| |_|_____|_____|_____| |_____(_)_| |_(_)_| |_|";
+echo "                                                                                             ";
+echo -e "\t \t \t \t WELCOME TO CENTOS SHELL SCRIPT V1.0"
+echo -e "\t 1. GET PC INFO"
+
+function getpcinfo
+{
+	clear
+	echo -e "\t \t \t SYSTEM INFORMATION"
+	echo -e "\t CPU : `cat /proc/cpuinfo | grep -m 1 "model name"`"
+	echo -e "\t RAM : `cat /proc/meminfo | grep -m 1 "MemTotal"`/ `cat /proc/meminfo | grep -m 1 "MemFree"`"
+	echo -e "\t HDD : You have : `find /dev/sd* ! -name "sd*[1-9]" | wc -l` DRIVE(S)"
+	echo -e "\t OS : `cat /etc/redhat-release`"
+}
+function formatdrive
+{
+	clear
+	echo -e "\t \t \t DISK MANAGEMENT TOOL \n"
+	read -p "PLEASE ENTER THE DEVICE PATH : " drivepath	
+	echo -e "\n THE DEVICE PATH YOU ENTER IS - $drivepath"
+	echo -e "\n `echo -e "p" | fdisk $drivepath | grep -m 1 $drivepath` \n"
+	read -p "PLEASE ENTER THE PARTITION SIZE (size{K,G,M} : " partsize
+	fdisk $drivepath <<EOF
+n
+p
+
+
++$partsize
+n
+e
+
+
+
+w
+
+p
+
+EOF
+}
+getpcinfo
+formatdrive
+
