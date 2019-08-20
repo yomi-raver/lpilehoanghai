@@ -1,0 +1,21 @@
+#TAO CAC O DIA SDA SDB SDC SDD.
+#PHÂN VÙNG Ổ ĐĨA THEO NHU CẦU , CÓ THỂ TẠO 1 PHẦN VÙNG DUY NHẤT CŨNG ĐC
+fdisk /dev/sd* => LVM = 8e
+#BẮT ĐẦU GROUP CÁC CONVERT CÁC DEVICE THÀNH PHYSICAL VOLUME
+pvcreate /dev/sd*[5-9]
+#BẮT ĐẦU GROUP CÁC PV THÀNH VOLUME GROUP
+vgcreate [name] [pg1] [pg2]
+ex: vgcreate gvol_data1 /dev/sdb5 /dev/sdc5 #group PV của các ổ đỉa khác nhau thành 1. được gọi là group volume
+#BẮT ĐẦU TẠO LVM TỪ GROUP
+lvcreate --name [name] --size=+[size][M,G] [groupvolume]
+ex: lvcreate --name lvol1 --size=+12G gvol_data1
+#FORMAT phân vùng lvm -> xfs
+mkfs.xfs /dev/[vgname]/[lvmname]
+ex: mkfs.xfs /dev/gvol_data1/lvol1
+#MOUNT POINT
+mount [hardpath] [localpath]
+ex:mount /dev/gvol_data1/lvol1 /ketoan #mount lvol1 đến địa chỉ của kế toán
+#fstab. làm centos thực thi lệnh mount mỗi khi khởi động lại hệ điều hành
+## nên backup lại file fbstab cho an toàn :-> cp /etc/fstab /etc/fstab_bk
+vi /etc/fstab
+-> /dev/gvol_data1/lvol1 /ketoan  xfs defaults  0 0
